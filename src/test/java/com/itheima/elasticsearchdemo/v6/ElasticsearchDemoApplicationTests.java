@@ -17,6 +17,8 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.IndicesClient;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -165,13 +167,10 @@ public class ElasticsearchDemoApplicationTests {
         IndicesClient indices = client.indices();
 
         GetIndexRequest getReqeust = new GetIndexRequest();
-        getReqeust.indices("movie").types("_doc");
-        GetIndexResponse getIndexResponse = client.indices().get(getReqeust, RequestOptions.DEFAULT);
+        getReqeust.indices("itcast");
+        getReqeust.types("_doc");
 
-
-//        GetRequest get = new GetRequest("movie", "text", "p8B0kIEBh2ToMB2wjZlO");
-//        GetResponse response = client.get(get, RequestOptions.DEFAULT);
-
+        GetIndexResponse getIndexResponse = indices.get(getReqeust, RequestOptions.DEFAULT);
 
         //获取结果
 //        ImmutableOpenMap<String, ImmutableOpenMap<String, MappingMetaData>> mappings = response.getMappings();
@@ -276,6 +275,17 @@ public class ElasticsearchDemoApplicationTests {
      */
     @Test
     public void updateDoc() throws IOException {
+        Person p = new Person();
+        p.setName("小胖2222");
+        p.setAge(30);
+        p.setAddress("陕西西安");
+
+        UpdateRequest updateRequest = new UpdateRequest("itcast","_doc","1");
+        updateRequest.doc(JSONObject.toJSONString(p), XContentType.JSON);
+
+        UpdateResponse updateResponse = client.update(updateRequest, RequestOptions.DEFAULT);
+
+        System.out.println(updateResponse.getGetResult());
 
     }
 
